@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,22 +24,27 @@ public class  SearchController {
 
     @RequestMapping(value = "results")
     public String results(Model model, @RequestParam String searchTerm, @RequestParam String searchType){
-        ArrayList<HashMap<String, String>>jobs;
+        ArrayList<HashMap<String, String>> jobs;
 
         if (searchType.equals("all")) {
             jobs = JobData.findByValue(searchTerm);
-        }
-        model.addAttribute("Title", "Results");
-        model.addAttribute("columns", ListController.columnChoices);
-        model.addAttribute("Jobs", jobs);
-        System.out.println(jobs);
-
-
-
+            model.addAttribute("Title", "Results");
+            model.addAttribute("columns", ListController.columnChoices);
+            model.addAttribute("Jobs", jobs);
             return "search";
+        }else{
+            jobs = JobData.findByColumnAndValue(searchType, searchTerm);
+            model.addAttribute("jobs", jobs);
+            model.addAttribute("columns",ListController.columnChoices);
+            return "search";
+        }
+
+
+
+
+
 
     }
-
 
 
 
